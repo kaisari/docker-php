@@ -63,4 +63,7 @@ RUN pecl install xdebug  && docker-php-ext-enable xdebug
 RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
 ENV PATH /root/.composer/vendor/bin:$PATH
 
+COPY bashrc.sh /etc/profile.d/
+ENV ENV="/etc/profile"
+
 CMD php-fpm
