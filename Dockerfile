@@ -13,6 +13,9 @@ RUN apk add --update \
         gettext \
         libintl \
         exiftool \
+        openssl-dev \
+        libmcrypt-dev \
+        gettext \
         $PHPIZE_DEPS
 
 ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl
