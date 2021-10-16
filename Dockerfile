@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-alpine
+FROM php:7.4-fpm-alpine
 LABEL mantainer="Cesar Vieira <cesar@kaisari.com.br>"
 
 RUN apk add --update \
@@ -28,7 +28,7 @@ RUN apk add --no-cache $MUSL_LOCALE_DEPS \
     && cd .. && rm -r musl-locales-master
 
 # Install the PHP mcrypt extention
-RUN echo "" | pecl install mcrypt-1.0.1 && docker-php-ext-enable mcrypt.so
+RUN echo "" | pecl install mcrypt-1.0.3 && docker-php-ext-enable mcrypt.so
 
 # Install the PHP pdo_mysql extention
 RUN docker-php-ext-install mysqli pdo pdo_mysql
@@ -40,12 +40,8 @@ RUN apk add --update libxml2-dev php-soap && docker-php-ext-install soap
 RUN apk add --update icu-dev && docker-php-ext-configure intl && docker-php-ext-install intl
 
 # Install the PHP gd library
-RUN apk add --no-cache freetype-dev libjpeg-turbo-dev libpng-dev \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ \
-    && docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd
-RUN apk add --update --no-cache autoconf g++ imagemagick imagemagick-dev libtool make pcre-dev \
-    && echo "" | pecl install imagick \
-    && docker-php-ext-enable imagick
+RUN apk add --no-cache libpng libpng-dev && docker-php-ext-install gd && apk del libpng-dev
+RUN apk add --no-cache imagemagick-dev imagemagick && echo "" | pecl install imagick && docker-php-ext-enable imagick
 
 # Install the PHP zip extention
 RUN docker-php-ext-install zip && docker-php-ext-enable zip
