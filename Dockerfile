@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:8.0-fpm-alpine
 LABEL mantainer="Cesar Vieira <cesar@kaisari.com.br>"
 
 RUN apk add --update \
@@ -28,7 +28,7 @@ RUN apk add --no-cache $MUSL_LOCALE_DEPS \
     && cd .. && rm -r musl-locales-master
 
 # Install the PHP mcrypt extention
-RUN echo "" | pecl install mcrypt-1.0.3 && docker-php-ext-enable mcrypt.so
+RUN echo "" | pecl install mcrypt && docker-php-ext-enable mcrypt.so
 
 # Install the PHP pdo_mysql extention
 RUN docker-php-ext-install mysqli pdo pdo_mysql
@@ -40,8 +40,17 @@ RUN apk add --update libxml2-dev php-soap && docker-php-ext-install soap
 RUN apk add --update icu-dev && docker-php-ext-configure intl && docker-php-ext-install intl
 
 # Install the PHP gd library
-RUN apk add --no-cache libpng libpng-dev && docker-php-ext-install gd && apk del libpng-dev
-RUN apk add --no-cache imagemagick-dev imagemagick && echo "" | pecl install imagick && docker-php-ext-enable imagick
+RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev imagemagick-dev imagemagick \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
+    && docker-php-ext-install -j${NPROC} gd \
+    && git clone https://github.com/Imagick/imagick \
+    && cd imagick \
+    && phpize && ./configure \
+    && make \
+    && make install \
+#    && echo "" | pecl install imagick \
+    && docker-php-ext-enable imagick
 
 # Install the PHP zip extention
 RUN docker-php-ext-install zip && docker-php-ext-enable zip
@@ -55,12 +64,23 @@ RUN docker-php-ext-install bcmath
 # Install OPcache
 RUN docker-php-ext-install opcache
 
+# Install Sockets
+RUN docker-php-ext-install sockets
+
 # Install the PHP xdebug extention
 RUN pecl install xdebug  && docker-php-ext-enable xdebug
 
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
 ENV PATH /root/.composer/vendor/bin:$PATH
+
+#Octane
+#RUN echo "" | pecl install swoole \
+#    && apk add php-cli \
+#    && docker-php-ext-install pcntl \
+#    && touch /usr/local/etc/php/conf.d/swoole.ini \
+#    && echo 'extension=swoole.so' > /usr/local/etc/php/conf.d/swoole.ini \
+#    && apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ nodejs=8.9.3-r1
 
 COPY bashrc.sh /etc/profile.d/
 ENV ENV="/etc/profile"
