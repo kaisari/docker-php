@@ -2,6 +2,7 @@ FROM php:7.2-fpm-alpine
 LABEL mantainer="Cesar Vieira <cesar@kaisari.com.br>"
 
 RUN apk add --update \
+        openssh \
         curl \
         git \
         libmemcached-dev \
