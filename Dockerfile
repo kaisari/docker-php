@@ -4,6 +4,7 @@ LABEL mantainer="Cesar Vieira <cesar@kaisari.com.br>"
 ENV ACCEPT_EULA=Y
 
 RUN apk add --update \
+        openssh \
         curl \
         git \
         libmemcached-dev \
