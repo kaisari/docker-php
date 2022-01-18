@@ -60,8 +60,11 @@ RUN docker-php-ext-install bcmath
 # Install OPcache
 RUN docker-php-ext-install opcache
 
+# Install Sockets
+RUN docker-php-ext-install sockets
+
 # Install the PHP xdebug extention
-RUN pecl install xdebug  && docker-php-ext-enable xdebug
+RUN pecl install xdebug
 
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
