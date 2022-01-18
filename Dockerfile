@@ -70,6 +70,8 @@ RUN docker-php-ext-install opcache
 # Install Sockets
 RUN docker-php-ext-install sockets
 
+RUN docker-php-ext-configure calendar && docker-php-ext-install calendar
+
 # Install prerequisites required for tools and extensions installed later on.
 RUN apk add --update bash gnupg libpng-dev libzip-dev su-exec unzip
 
