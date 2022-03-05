@@ -68,6 +68,8 @@ RUN docker-php-ext-install opcache
 # Install Sockets
 RUN docker-php-ext-install sockets
 
+RUN docker-php-ext-configure calendar && docker-php-ext-install calendar
+
 # Install the PHP xdebug extention
 RUN pecl install xdebug
 
