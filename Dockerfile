@@ -1,4 +1,4 @@
-FROM php:8.0-fpm-alpine
+FROM php:8.1-fpm-alpine
 LABEL mantainer="Cesar Vieira <cesar@kaisari.com.br>"
 
 RUN apk add --update \
