@@ -17,6 +17,7 @@ RUN apk add --update \
         openssl-dev \
         libmcrypt-dev \
         gettext \
+        patch \
         $PHPIZE_DEPS
 
 ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl
