@@ -28,9 +28,6 @@ RUN apk add --no-cache $MUSL_LOCALE_DEPS \
     && cmake -DLOCALE_PROFILE=OFF -D CMAKE_INSTALL_PREFIX:PATH=/usr . && make && make install \
     && cd .. && rm -r musl-locales-master
 
-# Install the PHP mcrypt extention
-RUN echo "" | pecl install mcrypt && docker-php-ext-enable mcrypt.so
-
 # Install the PHP pdo_mysql extention
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
