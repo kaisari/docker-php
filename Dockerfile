@@ -16,6 +16,7 @@ RUN apk add --update \
         openssl-dev \
         libmcrypt-dev \
         gettext \
+        patch \
         $PHPIZE_DEPS
 
 ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl
@@ -51,6 +52,8 @@ RUN docker-php-ext-configure exif && docker-php-ext-install exif && docker-php-e
 
 # Install BCMath
 RUN docker-php-ext-install bcmath
+
+RUN apk add gmp-dev && docker-php-ext-install gmp
 
 # Install OPcache
 RUN docker-php-ext-install opcache
