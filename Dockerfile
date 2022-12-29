@@ -17,6 +17,7 @@ RUN apk add --update \
         openssl-dev \
         libmcrypt-dev \
         gettext \
+        patch \
         $PHPIZE_DEPS
 
 ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl
@@ -66,6 +67,9 @@ RUN docker-php-ext-install opcache
 RUN docker-php-ext-install sockets
 
 RUN docker-php-ext-configure calendar && docker-php-ext-install calendar
+
+# MongoDB
+RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 # Install the PHP xdebug extention
 RUN pecl install xdebug
