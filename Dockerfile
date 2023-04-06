@@ -63,8 +63,11 @@ RUN docker-php-ext-install opcache
 # Install Sockets
 RUN docker-php-ext-install sockets
 
+# MongoDB
+RUN pecl install mongodb && docker-php-ext-enable mongodb
+
 # Install the PHP xdebug extention
-RUN pecl install xdebug
+RUN pecl install xdebug-2.9.8 && docker-php-ext-enable xdebug
 
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
